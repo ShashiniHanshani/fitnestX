@@ -1,4 +1,5 @@
 import 'package:fitness_app/models/find_something_to_eat_model/category_model.dart';
+import 'package:fitness_app/models/find_something_to_eat_model/popular.dart';
 import 'package:fitness_app/models/find_something_to_eat_model/recommendations.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +13,12 @@ class FindSomethingToEat extends StatefulWidget {
 class _FindSomethingToEatState extends State<FindSomethingToEat> {
   List<CategoryModel> categories = [];
   List<DietModel> models = [];
+  List<PopularModel> popular = [];
 
   void _getInfo() {
     categories = CategoryModel.getCategories();
     models = DietModel.getModel();
+    popular = PopularModel.getPopular();
   }
 
   @override
@@ -24,112 +27,210 @@ class _FindSomethingToEatState extends State<FindSomethingToEat> {
     return Scaffold(
       //appbar
       appBar: appBar(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //search bar
-          _searchField(),
-          SizedBox(
-            height: 40,
-          ),
-          //category
-          _categoriesSection(),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //search bar
+            _searchField(),
+            SizedBox(
+              height: 40,
+            ),
+            //category
+            _categoriesSection(),
 
-          SizedBox(
-            height: 40,
-          ),
-          //Recommendation for diet
-          _recommendationDiet()
-          //popular
-        ],
+            SizedBox(
+              height: 40,
+            ),
+            //Recommendation for diet
+            _recommendationDiet(),
+            SizedBox(
+              height: 40,
+            ),
+            //popular
+            _popularDiets(),
+          ],
+        ),
       ),
     );
   }
 
-  Column _recommendationDiet() {
+  Column _popularDiets() {
     return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 20.0),
-              child: Text(
-                "Recommendation\nfor Diet",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Colors.black,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  "Popular",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 220,
-              child: ListView.separated(
-                itemCount: models.length,
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                separatorBuilder: (context, index) => SizedBox(width: 25),
-                itemBuilder: ((context, index) {
-                  return Container(
-                    width: 180,
-                    decoration: BoxDecoration(
-                        color: models[index].boxColor.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Image.asset(
-                          models[index].iconPath,
-                          width: 150,
-                        ),
-                        Text(
-                          models[index].name,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          models[index].level +
-                              ' | ' +
-                              models[index].duration +
-                              ' | ' +
-                              models[index].calories,
-                        ),
-                        Container(
-                          width: 100,
-                          height: 40,
-                          child: Center(
-                            child: Text(
-                              "View",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: models[index].viewedSelected
-                                    ? Colors.white
-                                    : const Color(0xffC58BF2),
+              // SizedBox(
+              //   height: 20,
+              // ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20, bottom: 20),
+                child: Container(
+                  child: ListView.separated(
+                    itemCount: popular.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    separatorBuilder: (context, index) =>
+                        SizedBox(height: 20),
+                    itemBuilder: ((context, index) {
+                      return Container(
+                        height: 80,
+                        child: Row(
+                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(
+                              popular[index].iconPath,
+                              width: 90,
+                              height: 60,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 18, 8, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    popular[index].name,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    popular[index].level +
+                                        ' | ' +
+                                        popular[index].duration +
+                                        ' | ' +
+                                        popular[index].calories,
+                                  )
+                                ],
                               ),
                             ),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(99),
-                            gradient: LinearGradient(colors: [
-                              models[index].viewedSelected
-                                  ? const Color(0xff9DCEFF)
-                                  : Colors.transparent,
-                              models[index].viewedSelected
-                                  ? const Color(0xff92A3FD)
-                                  : Colors.transparent,
-                            ]),
+                            SizedBox(width: 20),
+                            Image.asset(
+                              "assets/icons/button.png",
+                              height: 25,
+                            )
+                          ],
+                        ),
+                        decoration: BoxDecoration(
+                            //color: Colors.blue,
+                            color: popular[index].boxIsSelected
+                                ? Colors.white
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: popular[index].boxIsSelected
+                                ? [
+                                    BoxShadow(
+                                        color: const Color(0xff1D1617)
+                                            .withOpacity(0.07),
+                                        offset: const Offset(0, 10),
+                                        blurRadius: 40,
+                                        spreadRadius: 0)
+                                  ]
+                                : []),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+            ],
+          );
+  }
+
+  Column _recommendationDiet() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 20.0),
+          child: Text(
+            "Recommendation\nfor Diet",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          height: 220,
+          child: ListView.separated(
+            itemCount: models.length,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            separatorBuilder: (context, index) => SizedBox(width: 25),
+            itemBuilder: ((context, index) {
+              return Container(
+                width: 180,
+                decoration: BoxDecoration(
+                    color: models[index].boxColor.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(12)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Image.asset(
+                      models[index].iconPath,
+                      width: 150,
+                    ),
+                    Text(
+                      models[index].name,
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      models[index].level +
+                          ' | ' +
+                          models[index].duration +
+                          ' | ' +
+                          models[index].calories,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 40,
+                      child: Center(
+                        child: Text(
+                          "View",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: models[index].viewedSelected
+                                ? Colors.white
+                                : const Color(0xffC58BF2),
                           ),
                         ),
-                      ],
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(99),
+                        gradient: LinearGradient(colors: [
+                          models[index].viewedSelected
+                              ? const Color(0xff9DCEFF)
+                              : Colors.transparent,
+                          models[index].viewedSelected
+                              ? const Color(0xff92A3FD)
+                              : Colors.transparent,
+                        ]),
+                      ),
                     ),
-                  );
-                }),
-              ),
-            ),
-          ],
-        );
+                  ],
+                ),
+              );
+            }),
+          ),
+        ),
+      ],
+    );
   }
 
   Column _categoriesSection() {
