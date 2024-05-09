@@ -1,4 +1,5 @@
 import 'package:fitness_app/pages/meal_planner/find_something_to_eat.dart';
+import 'package:fitness_app/pages/meal_planner/landing_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: FindSomethingToEat(),
+      // home: FindSomethingToEat(),
+      home: landing_page(),
     );
   }
 }
