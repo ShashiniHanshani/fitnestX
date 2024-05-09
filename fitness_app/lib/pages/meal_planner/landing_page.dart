@@ -10,6 +10,7 @@ class landing_page extends StatefulWidget {
 class _landing_pageState extends State<landing_page> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       //app bar
       appBar: _appBar(),
@@ -22,11 +23,61 @@ class _landing_pageState extends State<landing_page> {
             child: _mealNutritions(),
           ),
           //daily meal Schedule
+          _dailyMealSchedule(size),
+
           //Todays meal
           //find Something to eat
         ],
       ),
     );
+  }
+
+  Padding _dailyMealSchedule(Size size) {
+    return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Container(
+            height: 57,
+            width: size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Color(0xff92A3FD).withOpacity(0.2),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Daily meal Schedule",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  width: 100,
+                ),
+                Container(
+                  height: 30,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xff9DCEFF),
+                        Color(0xff92A3FD),
+                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 5),
+                    child: Text(
+                      "Check",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
   }
 
   Column _mealNutritions() {
@@ -46,8 +97,8 @@ class _landing_pageState extends State<landing_page> {
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Container(
-                height: 40,
-                width: 120,
+                height: 30,
+                width: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   gradient: LinearGradient(
