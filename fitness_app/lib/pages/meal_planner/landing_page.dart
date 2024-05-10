@@ -1,5 +1,7 @@
+import 'package:fitness_app/models/find_something_to_eat_model/find_somethingto_eat.dart';
 import 'package:fitness_app/models/find_something_to_eat_model/today_meal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class landing_page extends StatefulWidget {
   const landing_page({super.key});
@@ -10,9 +12,11 @@ class landing_page extends StatefulWidget {
 
 class _landing_pageState extends State<landing_page> {
   List<TodayMealModel> todayMeal = [];
+  List<SomethingToEatModel> somethingToEat = [];
 
   void _getInfo() {
     todayMeal = TodayMealModel.getTodaymeal();
+    somethingToEat = SomethingToEatModel.getSomethingToEat();
   }
 
   @override
@@ -23,119 +27,254 @@ class _landing_pageState extends State<landing_page> {
       //app bar
       appBar: _appBar(),
 
-      body: Column(
-        children: [
-          //meal nutritions
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: _mealNutritions(),
-          ),
-          //daily meal Schedule
-          _dailyMealSchedule(size),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //meal nutritions
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: _mealNutritions(),
+            ),
+            //daily meal Schedule
+            _dailyMealSchedule(size),
 
-          //Todays meal
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Today's Meal",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+            //Todays meal
+            _todaysMeal(),
+            //find Something to eat
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Find Something to Eat",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Container(
-                        height: 30,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xff9DCEFF),
-                              Color(0xff92A3FD),
-                            ],
-                          ),
-                        ),
-                        child: Center(
-                          child: DropdownButton<String>(
-                            iconEnabledColor: Colors.white,
-                            hint: Text(
-                              "Breakfast",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            items: ['Breakfast', 'Lunch', 'Dinner']
-                                .map((String value) {
-                              return DropdownMenuItem(
-                                alignment: Alignment.center,
-                                value: value,
-                                child: Text(
-                                  value,
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                ListView.separated(
-                  itemCount: todayMeal.length,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => SizedBox(
+                  ),
+                  const SizedBox(
                     height: 20,
                   ),
-                  itemBuilder: (context, index) {
-                    return Container(
-                      height: 80,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xff1D1617).withOpacity(0.07),
-                              offset: Offset(0, 10),
-                              blurRadius: 40,
-                              spreadRadius: 0,
+                  SizedBox(
+                    height: 200,
+                    child: ListView.separated(
+                      itemCount: somethingToEat.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      separatorBuilder: (context, index) => const SizedBox(
+                        width: 20,
+                      ),
+                      itemBuilder: (context, index) {
+                        final Color color = somethingToEat[index].boxColor;
+                        final LinearGradient? gradient = color ==
+                                Color(0xff92A3FD)
+                            ? LinearGradient(
+                                colors: [Color(0xff9DCEFF), Color(0xff92A3FD)],
+                              )
+                            : color == Color(0xffEEA4CE)
+                                ? LinearGradient(
+                                    colors: [
+                                      Color(0xffC58BF2),
+                                      Color(0xffEEA4CE)
+                                    ],
+                                  )
+                                : null;
+                        return Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(100),
+                              bottomRight: Radius.circular(22.0),
+                              topLeft: Radius.circular(22.0),
+                              bottomLeft: Radius.circular(22.0),
                             ),
-                          ]),
-                      child: Row(
-                        children: [
-                          Image.asset(todayMeal[index].iconPath),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 18, 8, 0),
+                            color:
+                                somethingToEat[index].boxColor.withOpacity(0.2),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Image.asset(
+                                    somethingToEat[index].iconPath,
+                                    height: 74,
+                                    width: 118,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 Text(
-                                  todayMeal[index].name,
-                                  style: TextStyle(
+                                  somethingToEat[index].mealType,
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Text("Today " + "| " + todayMeal[index].time),
+                                Text(
+                                  "${somethingToEat[index].foodCollection} Foods ",
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  height: 30,
+                                  width: 98,
+                                  decoration: BoxDecoration(
+                                    // color: somethingToEat[index].boxColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                    gradient: gradient,
+                                    color: color,
+                                  ),
+                                  child: const Text(
+                                    "Select",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    );
-                  },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding _todaysMeal() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Today's Meal",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Container(
+                  height: 30,
+                  width: 120,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xff9DCEFF),
+                        Color(0xff92A3FD),
+                      ],
+                    ),
+                  ),
+                  child: Center(
+                    child: DropdownButton<String>(
+                      iconEnabledColor: Colors.white,
+                      hint: const Text(
+                        "Breakfast",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      items:
+                          ['Breakfast', 'Lunch', 'Dinner'].map((String value) {
+                        return DropdownMenuItem(
+                          alignment: Alignment.center,
+                          value: value,
+                          child: Text(
+                            value,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (_) {},
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          //find Something to eat
+          const SizedBox(height: 20),
+          ListView.separated(
+            itemCount: todayMeal.length,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            separatorBuilder: (context, index) => const SizedBox(
+              height: 20,
+            ),
+            itemBuilder: (context, index) {
+              return Container(
+                height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xff1D1617).withOpacity(0.07),
+                        offset: const Offset(0, 10),
+                        blurRadius: 40,
+                        spreadRadius: 0,
+                      ),
+                    ]),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset(todayMeal[index].iconPath),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 18, 8, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                todayMeal[index].name,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text("Today | ${todayMeal[index].time}"),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Image.asset(
+                        "assets/icons/reminders.png",
+                        height: 30,
+                        width: 30,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
@@ -149,16 +288,16 @@ class _landing_pageState extends State<landing_page> {
         width: size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Color(0xff92A3FD).withOpacity(0.2),
+          color: const Color(0xff92A3FD).withOpacity(0.2),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "Daily meal Schedule",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               width: 90,
             ),
             Container(
@@ -166,15 +305,15 @@ class _landing_pageState extends State<landing_page> {
               width: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   colors: [
                     Color(0xff9DCEFF),
                     Color(0xff92A3FD),
                   ],
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, top: 5),
+              child: const Padding(
+                padding: EdgeInsets.only(left: 20, top: 5),
                 child: Text(
                   "Check",
                   style: TextStyle(
@@ -196,7 +335,7 @@ class _landing_pageState extends State<landing_page> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               "Meal Nutritions",
               style: TextStyle(
                 fontSize: 16,
@@ -210,7 +349,7 @@ class _landing_pageState extends State<landing_page> {
                 width: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     colors: [
                       Color(0xff9DCEFF),
                       Color(0xff92A3FD),
@@ -220,7 +359,7 @@ class _landing_pageState extends State<landing_page> {
                 child: Center(
                   child: DropdownButton<String>(
                     iconEnabledColor: Colors.white,
-                    hint: Text(
+                    hint: const Text(
                       "Weekly",
                       style: TextStyle(color: Colors.white),
                     ),
@@ -256,7 +395,7 @@ class _landing_pageState extends State<landing_page> {
   AppBar _appBar() {
     return AppBar(
       centerTitle: true,
-      title: Text(
+      title: const Text(
         "Meal Planner",
         style: TextStyle(
           fontSize: 18,
@@ -267,12 +406,12 @@ class _landing_pageState extends State<landing_page> {
       elevation: 0.0,
       leading: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.all(12),
+        margin: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Color(0xffF7F8F8),
+          color: const Color(0xffF7F8F8),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(
+        child: const Icon(
           Icons.arrow_back_ios_new_sharp,
         ),
       ),
@@ -282,12 +421,12 @@ class _landing_pageState extends State<landing_page> {
           child: Container(
             width: 32,
             alignment: Alignment.center,
-            margin: EdgeInsets.all(12),
+            margin: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Color(0xffF7F8F8),
+              color: const Color(0xffF7F8F8),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Image(image: AssetImage("assets/icons/dot.png")),
+            child: const Image(image: AssetImage("assets/icons/dot.png")),
           ),
         )
       ],
