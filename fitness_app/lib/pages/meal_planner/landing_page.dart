@@ -1,7 +1,6 @@
 import 'package:fitness_app/models/find_something_to_eat_model/find_somethingto_eat.dart';
 import 'package:fitness_app/models/find_something_to_eat_model/today_meal.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class landing_page extends StatefulWidget {
   const landing_page({super.key});
@@ -41,124 +40,123 @@ class _landing_pageState extends State<landing_page> {
 
             //Todays meal
             _todaysMeal(),
-            //find Something to eat
             const SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Find Something to Eat",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    height: 200,
-                    child: ListView.separated(
-                      itemCount: somethingToEat.length,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) => const SizedBox(
-                        width: 20,
-                      ),
-                      itemBuilder: (context, index) {
-                        final Color color = somethingToEat[index].boxColor;
-                        final LinearGradient? gradient = color ==
-                                Color(0xff92A3FD)
-                            ? LinearGradient(
-                                colors: [Color(0xff9DCEFF), Color(0xff92A3FD)],
-                              )
-                            : color == Color(0xffEEA4CE)
-                                ? LinearGradient(
-                                    colors: [
-                                      Color(0xffC58BF2),
-                                      Color(0xffEEA4CE)
-                                    ],
-                                  )
-                                : null;
-                        return Container(
-                          width: 200,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(100),
-                              bottomRight: Radius.circular(22.0),
-                              topLeft: Radius.circular(22.0),
-                              bottomLeft: Radius.circular(22.0),
-                            ),
-                            color:
-                                somethingToEat[index].boxColor.withOpacity(0.2),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Image.asset(
-                                    somethingToEat[index].iconPath,
-                                    height: 74,
-                                    width: 118,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  somethingToEat[index].mealType,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  "${somethingToEat[index].foodCollection} Foods ",
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  height: 30,
-                                  width: 98,
-                                  decoration: BoxDecoration(
-                                    // color: somethingToEat[index].boxColor,
-                                    borderRadius: BorderRadius.circular(50),
-                                    gradient: gradient,
-                                    color: color,
-                                  ),
-                                  child: const Text(
-                                    "Select",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            )
+            //find Something to eat
+            _findSomethingToEat()
           ],
         ),
+      ),
+    );
+  }
+
+  Padding _findSomethingToEat() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Find Something to Eat",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            height: 200,
+            child: ListView.separated(
+              itemCount: somethingToEat.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              separatorBuilder: (context, index) => const SizedBox(
+                width: 20,
+              ),
+              itemBuilder: (context, index) {
+                final Color color = somethingToEat[index].boxColor;
+                final LinearGradient? gradient = color == Color(0xff92A3FD)
+                    ? const LinearGradient(
+                        colors: [Color(0xff9DCEFF), Color(0xff92A3FD)],
+                      )
+                    : color == const Color(0xffEEA4CE)
+                        ? const LinearGradient(
+                            colors: [Color(0xffEEA4CE), Color(0xffC58BF2)],
+                          )
+                        : null;
+                return Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(100),
+                      bottomRight: Radius.circular(22.0),
+                      topLeft: Radius.circular(22.0),
+                      bottomLeft: Radius.circular(22.0),
+                    ),
+                    color: somethingToEat[index].boxColor.withOpacity(0.2),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Image.asset(
+                            somethingToEat[index].iconPath,
+                            height: 74,
+                            width: 118,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          somethingToEat[index].mealType,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          "${somethingToEat[index].foodCollection} Foods ",
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 4),
+                          height: 30,
+                          width: 98,
+                          decoration: BoxDecoration(
+                            // color: somethingToEat[index].boxColor,
+                            borderRadius: BorderRadius.circular(50),
+                            gradient: gradient,
+                            color: color,
+                          ),
+                          child: const Text(
+                            "Select",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
